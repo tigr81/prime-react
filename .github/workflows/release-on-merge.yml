@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+        with:
+            fetch-depth: 0  # Fetch all history, including tags
 
       - name: Set up Git
         run: |
@@ -57,9 +59,7 @@ jobs:
       - name: Bump version
         id: bump_version
         run: |
-          # Remove the 'v' from the last tag if it exists
           version="${{ env.last_tag }}"
-          version="${version#v}"
 
           # Parse the version (e.g., 1.2.3) into major, minor, patch
           IFS='.' read -r major minor patch <<< "$version"
