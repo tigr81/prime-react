@@ -31,10 +31,19 @@ jobs:
         id: parse_release_type
         run: |
           # Extract "release(major|minor|patch)" from PR title
-          release_type=$(echo "$GITHUB_EVENT_PULL_REQUEST_TITLE" | grep -oP '(?<=release\()(major|minor|patch)(?=\))')
-          echo "release_type=$release_type" >> $GITHUB_ENV
+          release_type=$(echo "$GITHUB_EVENT_PULL_REQUEST_TITLE" | grep -oP '(?<=release\()(major|minor|patch)(?=\))')  
+          # Check if release_type is empty and provide detailed feedback
+          if [ -z "$release_type" ]; then
+              echo "PR title: '$GITHUB_EVENT_PULL_REQUEST_TITLE'"
+              echo "Error: PR title must include 'release(major|minor|patch)'."
+              echo "Example of a valid PR title: 'release(minor): Add new feature'"
+              exit 1
+          else
+              echo "release_type=$release_type" >> $GITHUB_ENV
+          fi
         env:
-          GITHUB_EVENT_PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+            GITHUB_EVENT_PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
+  
   
 
       - name: Check if release type was provided
