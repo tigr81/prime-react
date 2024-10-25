@@ -26,7 +26,7 @@ jobs:
         id: get_last_tag
         run: |
           # Get the latest tag, default to v0.0.0 if none exists
-          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
           echo "Latest tag: $last_tag"
           echo "last_tag=$last_tag" >> $GITHUB_ENV
 
@@ -81,7 +81,7 @@ jobs:
           esac
 
           # Format new version and export it
-          new_version="v$major.$minor.$patch"
+          new_version="$major.$minor.$patch"
           echo "Last version: $version"
           echo "New version: $new_version"
           echo "new_version=$new_version" >> $GITHUB_OUTPUT 
