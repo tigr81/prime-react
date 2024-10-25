@@ -101,6 +101,6 @@ jobs:
         env:
             NEW_VERSION: ${{ needs.prepare_release.outputs.new_version }}"
         run: |
-          echo "Creating Git tag: $NEW_VERSION"
+          echo "Creating Git tag: ${NEW_VERSION}"
           git tag $NEW_VERSION
           git push origin $NEW_VERSION
