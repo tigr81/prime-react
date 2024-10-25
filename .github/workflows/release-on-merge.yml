@@ -25,6 +25,7 @@ jobs:
         run: |
           # Get the latest tag, default to v0.0.0 if none exists
           last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "Latest tag: $last_tag"
           echo "last_tag=$last_tag" >> $GITHUB_ENV
 
       - name: Parse PR title for release type
@@ -32,6 +33,7 @@ jobs:
         run: |
           # Extract "release(major|minor|patch)" from PR title
           release_type=$(echo "$GITHUB_EVENT_PULL_REQUEST_TITLE" | grep -oP '(?<=release\()(major|minor|patch)(?=\))')  
+          echo "Parsed release_type: $release_type"
           # Check if release_type is empty and provide detailed feedback
           if [ -z "$release_type" ]; then
               echo "PR title: '$GITHUB_EVENT_PULL_REQUEST_TITLE'"
@@ -78,6 +80,8 @@ jobs:
 
           # Format new version and export it
           new_version="v$major.$minor.$patch"
+          echo "Last version: $version"
+          echo "New version: $new_version"
           echo "new_version=$new_version" >> $GITHUB_ENV
 
   create_tag:
@@ -93,5 +97,6 @@ jobs:
 
       - name: Create new tag
         run: |
+          echo "Creating Git tag: ${{ env.new_version }}"
           git tag ${{ env.new_version }}
           git push origin ${{ env.new_version }}
