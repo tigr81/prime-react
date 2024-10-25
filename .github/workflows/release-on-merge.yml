@@ -82,7 +82,7 @@ jobs:
           new_version="v$major.$minor.$patch"
           echo "Last version: $version"
           echo "New version: $new_version"
-          echo "new_version=$new_version" >> $GITHUB_ENV
+          echo "new_version=$new_version" >> $GITHUB_OUTPUT 
 
   create_tag:
     needs: prepare_release  # Ensure this job runs after the preparation job
@@ -97,6 +97,6 @@ jobs:
 
       - name: Create new tag
         run: |
-          echo "Creating Git tag: ${{ env.new_version }}"
-          git tag ${{ env.new_version }}
-          git push origin ${{ env.new_version }}
+          echo "Creating Git tag: ${{ needs.prepare_release.outputs.new_version }}"
+          git tag ${{ needs.prepare_release.outputs.new_version }}
+          git push origin ${{ needs.prepare_release.outputs.new_version }}
