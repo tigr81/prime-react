@@ -6,3 +6,4 @@ tigr81 prime react project template
 ```bash
 tigr81 scaffold prime-react --dev --default
 ```
+
